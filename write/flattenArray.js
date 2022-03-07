@@ -12,7 +12,16 @@ const flattenArray = (arr) => {
 	return result;
 };
 
+const flatArray = (arr) => {
 
-const data = flattenArray([[1, 2], [3, [4, 5], 6, [7, 8]], 9]);
+	while (arr.some(item => Array.isArray(item))) {
+		arr = [].concat(...arr);
+	}
+
+	return arr;
+};
+
+
+const data = flatArray([[1, 2], [3, [4, 5], 6, [7, 8]], 9]);
 
 console.log(data);

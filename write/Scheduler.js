@@ -10,29 +10,28 @@ class Scheduler {
 		this.queue.push(promise);
 	};
 
-	splitToQueue = () => {
-		const result = [],
+	splitQueue = () => {
+		let arr = [],
 			len = this.queue.length;
-
 		for (let i = 0; i < len; i += this.limit) {
-			result.push(this.queue.slice(i, i + this.limit));
+			arr.push(this.queue.slice(i, i + this.limit));
 		}
-
-		return result;
+		return arr;
 	};
 
 	request = () => {
-		const list = this.splitToQueue(),
-			listLen = list.length;
+		const q = this.splitQueue(),
+			len = q.length,
+			current = q[this.count];
 
-		return Promise.all(list[this.count]).then(res => {
-			this.result = this.result.concat(res);
+		return Promise.all(current).then(res => {
 			this.count++;
-			if (this.count < listLen) {
-				console.log(this.count);
-				return this.request();
-			} else {
+			this.result = this.result.concat(res);
+			if (this.count === len) {
 				return this.result;
+			} else {
+				console.log(this.count, this.result);
+				return this.request();
 			}
 		});
 	};

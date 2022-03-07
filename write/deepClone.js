@@ -1,39 +1,5 @@
 const deepClone = (obj, cache = new Map()) => {
-	if (cache.has(obj)) {
-		return cache.get(obj);
-	}
 
-	let res;
-
-	if (typeof obj === "function") {
-		res = function () {
-			return obj.apply(this, arguments);
-		};
-		cache.set(obj, res);
-		return res;
-	}
-
-	if (typeof obj === "object" && obj !== null) {
-		if (obj instanceof Date) {
-			res = new Date(obj);
-		} else if (obj instanceof RegExp) {
-			res = new RegExp(obj.source, obj.flags);
-		} else {
-			if (Array.isArray(obj)) {
-				res = [];
-			} else {
-				res = {};
-			}
-
-			for (let p in obj) {
-				res[p] = deepClone(obj[p], cache);
-			}
-			cache.set(obj, res);
-			return res;
-		}
-	}
-
-	return obj;
 };
 
 

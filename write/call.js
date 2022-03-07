@@ -3,13 +3,13 @@ Function.prototype.customCall = function (ctx, ...args) {
 		throw new TypeError("禁止直接调用");
 	}
 
-	const _this = ctx || window;
+	ctx = ctx || window;
 
-	_this.fn = this;
+	ctx.fn = this;
 
-	const res = _this.fn(...args);
+	const res = ctx.fn(...args);
 
-	delete _this.fn;
+	delete ctx.fn;
 
 	return res;
 };

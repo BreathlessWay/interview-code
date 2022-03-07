@@ -10,6 +10,6 @@ Function.prototype.customBind = function (ctx) {
 			return new _this(...arguments);
 		}
 
-		return this.apply(ctx, arguments);
+		return _this.apply(ctx, arguments);
 	};
 };
