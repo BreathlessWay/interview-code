@@ -3,7 +3,7 @@ const flattenArray = (arr) => {
 
 	arr.forEach(item => {
 		if (Array.isArray(item)) {
-			result = result.concat(flatten(item));
+			result = result.concat(flattenArray(item));
 		} else {
 			result.push(item);
 		}
@@ -13,6 +13,6 @@ const flattenArray = (arr) => {
 };
 
 
-const data = flatten([[1, 2], [3, [4, 5], 6, [7, 8]], 9]);
+const data = flattenArray([[1, 2], [3, [4, 5], 6, [7, 8]], 9]);
 
 console.log(data);
