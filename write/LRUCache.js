@@ -1,36 +1,35 @@
 class LRUCache {
-	constructor (capacity) {
-		this.capacity = capacity;
+	constructor (limit) {
+		this.limit = limit;
 		this.map = new Map();
 	}
 
-	get (key) {
-		const has = this.map.has(key);
-		if (has) {
-			const v = this.map.get(key);
+	put = (key, value) => {
+		const hasKey = this.map.has(key);
 
-			this.map.delete(key);
-			this.map.set(key, v);
-			return v;
-		}
-		return -1;
-	}
-
-	put (key, value) {
-		const has = this.map.has(key);
-		if (has) {
+		if (hasKey) {
 			this.map.delete(key);
 			this.map.set(key, value);
 		} else {
 			this.map.set(key, value);
-			const len = this.map.size;
-			if (len > this.capacity) {
-				// 获取头部的神奇处理 keys().next()
-				this.map.delete(this.map.keys().next().value);
+			if (this.map.size > this.limit) {
+				const head = this.map.keys().next().value;
+				this.map.delete(head);
 			}
 		}
-	}
+	};
 
+	get = (key) => {
+		const hasKey = this.map.has(key);
+		if (hasKey) {
+			const v = this.map.get(key);
+			this.map.delete(key);
+			this.map.set(key, v);
+			return v;
+		} else {
+			return -1;
+		}
+	};
 }
 
 const lRUCache = new LRUCache(2);

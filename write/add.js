@@ -3,7 +3,7 @@ const add = (...args) => {
 		if (rest.length) {
 			return add(...args, ...rest);
 		} else {
-			return [...args, ...rest].reduce((previousValue, currentValue) => {
+			return [...args].reduce((previousValue, currentValue) => {
 				return previousValue + currentValue;
 			});
 		}

@@ -1,76 +1,61 @@
 class CustomPromise {
-	constructor (fun) {
+	constructor (execute) {
 		this.status = "pending";
-		this.value = "";
-		this.reason = "";
-		this.fulfilledcallback = [];
-		this.rejectedcallback = [];
+		this.onFulfilledCallback = [];
+		this.onRejectedCallback = [];
+		this.value = null;
+		this.reason = null;
+
 		try {
-			fun(this.resolve, this.reject);
+			execute(this.resolve, this.reject);
 		} catch (e) {
 			this.reject(e);
 		}
 	}
 
-	static resolve (value) {
-		return new CustomPromise((resolve) => resolve(value));
-	}
-
-	static reject (error) {
-		return new CustomPromise((resolve, reject) => reject(error));
-	}
-
-	static all (promises) {
+	static all = (promises) => {
 		return new CustomPromise((resolve, reject) => {
-			const len = promises.length,
-				result = [];
-
-			let index = 0;
+			const len = promises.length;
 			if (!len) {
-				resolve(result);
-			} else {
-				for (let i = 0; i < len; i++) {
-					const current = promises[i];
-
-					current.then(res => {
-						result[i] = res;
-						index++;
-						if (index === len) {
-							resolve(result);
-						}
-					}).catch(err => {
-						reject(err);
-					});
-				}
+				resolve([]);
+				return;
+			}
+			let result = [], index = 0;
+			for (let i = 0; i < len; i++) {
+				const current = promises[i];
+				current.then(res => {
+					index++;
+					result[i] = res;
+					if (index === len) {
+						resolve(result);
+					}
+				}).catch(err => {
+					reject(err);
+				});
 			}
 		});
-	}
+	};
 
-	static race (promises) {
+	static race = (promises) => {
 		return new CustomPromise((resolve, reject) => {
-				const len = promises.length;
-
-				if (!len) {
-					resolve();
-				} else {
-					for (let i = 0; i < len; i++) {
-						promises[i].then(res => {
-							resolve(res);
-						}).catch(err => {
-							reject(err);
-						});
-					}
-				}
+			const len = promises.length;
+			if (!len) {
+				resolve();
+				return;
 			}
-		);
-	}
+			for (let i = 0; i < len; i++) {
+				const current = promises[i];
+				current.then(res => resolve(res)).catch(err => reject(err));
+			}
+		});
+	};
 
 	resolve = (value) => {
 		if (this.status === "pending") {
 			this.status = "fulfilled";
+			this.reason = null;
 			this.value = value;
-			this.reason = "";
-			this.fulfilledcallback.forEach(fn => fn(value));
+			this.onFulfilledCallback.forEach(fn => fn(value));
 		}
 	};
 
@@ -78,83 +63,81 @@ class CustomPromise {
 		if (this.status === "pending") {
 			this.status = "rejected";
 			this.reason = error;
-			this.value = "";
-			this.rejectedcallback.forEach(fn => fn(error));
+			this.value = null;
+			this.onRejectedCallback.forEach(fn => fn(error));
 		}
 	};
 
-	then = (onFulFilled, onRejected) => {
-		if (typeof onFulFilled !== "function") {
-			onFulFilled = function (v) {
-				return v;
-			};
+	then = (onResolve, onReject) => {
+		if (typeof onResolve !== "function") {
+			onResolve = (v) => v;
 		}
-
-		if (typeof onRejected !== "function") {
-			onRejected = function (err) {
-				throw err;
+		if (typeof onReject !== "function") {
+			onReject = error => {
+				throw new Error(error);
 			};
 		}
 
 		return new CustomPromise((resolve, reject) => {
 			switch (this.status) {
 				case "pending": {
-					this.fulfilledcallback.push(() => {
+					this.onFulfilledCallback.push(() => {
 						setTimeout(() => {
 							try {
-								resolve(onFulFilled(this.value));
+								resolve(onResolve(this.value));
 							} catch (e) {
 								reject(e);
 							}
 						}, 0);
 					});
-					this.rejectedcallback.push(() => {
+					this.onRejectedCallback.push(() => {
 						setTimeout(() => {
 							try {
-								reject(onRejected(this.reason));
+								reject(onReject(this.reason));
 							} catch (e) {
 								reject(e);
 							}
 						}, 0);
 					});
-					break;
+					return;
 				}
 				case "fulfilled": {
 					setTimeout(() => {
 						try {
-							resolve(onFulFilled(this.value));
+							resolve(onResolve(this.value));
 						} catch (e) {
 							reject(e);
 						}
 					}, 0);
-					break;
+					return;
 				}
 				case "rejected": {
 					setTimeout(() => {
 						try {
-							reject(onRejected(this.reason));
+							reject(onReject(this.reason));
 						} catch (e) {
 							reject(e);
 						}
 					}, 0);
+					return;
 				}
 			}
 		});
 	};
 
-	catch
-		= (onRejected) => {
-		return this.then(null, onRejected);
+	catch = (onReject) => {
+		return this.then(null, onReject);
 	};
 
-	finally
-		= (fun) => {
+	finally = (fn) => {
 		return this.then((value) => {
-			fun();
+			fn();
 			return value;
-		}, (error) => {
-			fun();
+		}, error => {
+			fn();
 			throw error;
 		});
 	};
 }
+
+// 用promise race + setTimeout 实现请求超时时间

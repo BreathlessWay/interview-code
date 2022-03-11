@@ -1,17 +1,5 @@
 const flattenObject = (obj) => {
-	const res = {};
 
-	const dfs = (o, prefix = "") => {
-		if (typeof o === "object" && o !== null) {
-			for (let p in o) {
-				dfs(o[p], `${ prefix }${ prefix ? "." : "" }${ p }`);
-			}
-		} else {
-			res[prefix] = o;
-		}
-	};
-	dfs(obj);
-	console.log(res);
 };
 
 const obj = {

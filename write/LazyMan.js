@@ -1,48 +1,44 @@
 class LazyMan {
 	constructor (name) {
 		this.name = name;
-		this.task = [];
-		const task = () => {
-			console.log(`Hi! This is ${ name }`);
+		this.queue = [];
+		this.queue.push(() => {
+			console.log(`this is ${ name }`);
 			this.next();
-		};
+		});
 
-		this.task.push(task);
-		// 宏任务 启动 lazyMan
 		setTimeout(() => {
 			this.next();
 		}, 0);
 	}
 
 	next = () => {
-		const task = this.task.shift();
+		const task = this.queue.shift();
 		task && task();
 	};
 
-	sleep = (ms) => {
-		const task = () => {
+	sleep = (time) => {
+		this.queue.push(() => {
 			setTimeout(() => {
-				console.log(`Wake up after ${ ms }`);
+				console.log(`Wake up after ${ time }`);
 				this.next();
-			}, ms);
-		};
-		this.task.push(task);
+			}, time);
+		});
 		return this;
 	};
 
-	sleepFirst = (ms) => {
-		const task = () => {
+	sleepFirst = (time) => {
+		this.queue.unshift(() => {
 			setTimeout(() => {
-				console.log(`Wake up after ${ ms }`);
+				console.log(`Wake up after ${ time }`);
 				this.next();
-			}, ms);
-		};
-		this.task.unshift(task);
+			}, time);
+		});
 		return this;
 	};
 
 	eat = (food) => {
-		this.task.push(() => {
+		this.queue.push(() => {
 			console.log(`Eat ${ food }`);
 			this.next();
 		});
@@ -52,8 +48,8 @@ class LazyMan {
 
 const lazyMan = (name) => new LazyMan(name);
 
-// lazyMan("Hank").sleep(1).eat("dinner");
+lazyMan("Hank").sleep(1000).eat("dinner");
 
 // lazyMan("Hank").eat("dinner").eat("supper");
 
-lazyMan("Hank").eat("supper").sleepFirst(5);
+// lazyMan("Hank").eat("supper").sleepFirst(5000);
