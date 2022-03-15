@@ -1,9 +1,9 @@
 const add = (...args) => {
 	return (...rest) => {
 		if (rest.length) {
-			return add(...args, ...rest);
+			return add(...rest, ...args);
 		} else {
-			return [...args].reduce((previousValue, currentValue) => {
+			return args.reduce((previousValue, currentValue) => {
 				return previousValue + currentValue;
 			});
 		}

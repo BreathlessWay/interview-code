@@ -1,9 +1,10 @@
 class LazyMan {
-	constructor (name) {
+	constructor(name) {
 		this.name = name;
 		this.queue = [];
+
 		this.queue.push(() => {
-			console.log(`this is ${ name }`);
+			console.log(`I am ${this.name}`);
 			this.next();
 		});
 
@@ -13,14 +14,22 @@ class LazyMan {
 	}
 
 	next = () => {
-		const task = this.queue.shift();
-		task && task();
+		const fn = this.queue.shift();
+		fn && fn();
+	};
+
+	eat = (food) => {
+		this.queue.push(() => {
+			console.log(food);
+			this.next();
+		});
+		return this;
 	};
 
 	sleep = (time) => {
 		this.queue.push(() => {
 			setTimeout(() => {
-				console.log(`Wake up after ${ time }`);
+				console.log(`sleep ${time}`);
 				this.next();
 			}, time);
 		});
@@ -30,17 +39,9 @@ class LazyMan {
 	sleepFirst = (time) => {
 		this.queue.unshift(() => {
 			setTimeout(() => {
-				console.log(`Wake up after ${ time }`);
+				console.log(`sleep ${time}`);
 				this.next();
 			}, time);
-		});
-		return this;
-	};
-
-	eat = (food) => {
-		this.queue.push(() => {
-			console.log(`Eat ${ food }`);
-			this.next();
 		});
 		return this;
 	};
@@ -48,8 +49,8 @@ class LazyMan {
 
 const lazyMan = (name) => new LazyMan(name);
 
-lazyMan("Hank").sleep(1000).eat("dinner");
+// lazyMan("Hank").sleep(1000).eat("dinner");
 
 // lazyMan("Hank").eat("dinner").eat("supper");
 
-// lazyMan("Hank").eat("supper").sleepFirst(5000);
+lazyMan("Hank").eat("supper").sleepFirst(5000);

@@ -1,5 +1,5 @@
 const templateRender = (str, json) => {
-	const result = str.replace(/\{\{(\w+)\}\}/g, (match, char) => {
+	const result = str.replace(/{{(\w+)}}/g, (match, char) => {
 		return json[char];
 	});
 	console.log(result);

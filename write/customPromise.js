@@ -1,10 +1,10 @@
 class CustomPromise {
-	constructor (execute) {
+	constructor(execute) {
+		this.value = null;
+		this.reason = null;
 		this.status = "pending";
 		this.onFulfilledCallback = [];
 		this.onRejectedCallback = [];
-		this.value = null;
-		this.reason = null;
 
 		try {
 			execute(this.resolve, this.reject);
@@ -13,28 +13,31 @@ class CustomPromise {
 		}
 	}
 
-	static all = (promises) => {
+	static all(promises) {
 		return new CustomPromise((resolve, reject) => {
 			const len = promises.length;
+
 			if (!len) {
 				resolve([]);
 				return;
 			}
+
 			let result = [], index = 0;
 			for (let i = 0; i < len; i++) {
 				const current = promises[i];
 				current.then(res => {
-					index++;
 					result[i] = res;
+					index++;
 					if (index === len) {
 						resolve(result);
 					}
-				}).catch(err => {
-					reject(err);
-				});
+				})
+					.catch(err => {
+						reject(err);
+					});
 			}
 		});
-	};
+	}
 
 	static race = (promises) => {
 		return new CustomPromise((resolve, reject) => {
@@ -44,8 +47,11 @@ class CustomPromise {
 				return;
 			}
 			for (let i = 0; i < len; i++) {
-				const current = promises[i];
-				current.then(res => resolve(res)).catch(err => reject(err));
+				promises[i].then(res => {
+					resolve(res);
+				}).catch(err => {
+					reject(err);
+				});
 			}
 		});
 	};
@@ -59,32 +65,33 @@ class CustomPromise {
 		}
 	};
 
-	reject = (error) => {
+	reject = (reason) => {
 		if (this.status === "pending") {
 			this.status = "rejected";
-			this.reason = error;
+			this.reason = reason;
 			this.value = null;
-			this.onRejectedCallback.forEach(fn => fn(error));
+			this.onRejectedCallback.forEach(fn => fn(reason));
 		}
 	};
 
-	then = (onResolve, onReject) => {
-		if (typeof onResolve !== "function") {
-			onResolve = (v) => v;
-		}
-		if (typeof onReject !== "function") {
-			onReject = error => {
-				throw new Error(error);
+	then = (onFulfilled, onRejected) => {
+		if (typeof onFulfilled !== "function") {
+			onFulfilled = function (v) {
+				return v;
 			};
 		}
-
+		if (typeof onRejected !== "function") {
+			onRejected = function (err) {
+				throw err;
+			};
+		}
 		return new CustomPromise((resolve, reject) => {
 			switch (this.status) {
 				case "pending": {
 					this.onFulfilledCallback.push(() => {
 						setTimeout(() => {
 							try {
-								resolve(onResolve(this.value));
+								resolve(onFulfilled(this.value));
 							} catch (e) {
 								reject(e);
 							}
@@ -93,33 +100,33 @@ class CustomPromise {
 					this.onRejectedCallback.push(() => {
 						setTimeout(() => {
 							try {
-								reject(onReject(this.reason));
+								reject(onRejected(this.reason));
 							} catch (e) {
 								reject(e);
 							}
 						}, 0);
 					});
-					return;
+					break;
 				}
 				case "fulfilled": {
 					setTimeout(() => {
 						try {
-							resolve(onResolve(this.value));
+							resolve(onFulfilled(this.value));
 						} catch (e) {
 							reject(e);
 						}
 					}, 0);
-					return;
+					break;
 				}
 				case "rejected": {
 					setTimeout(() => {
 						try {
-							reject(onReject(this.reason));
+							reject(onRejected(this.reason));
 						} catch (e) {
 							reject(e);
 						}
 					}, 0);
-					return;
+					break;
 				}
 			}
 		});
@@ -130,10 +137,10 @@ class CustomPromise {
 	};
 
 	finally = (fn) => {
-		return this.then((value) => {
+		return this.then((v) => {
 			fn();
-			return value;
-		}, error => {
+			return v;
+		}, (error) => {
 			fn();
 			throw error;
 		});
