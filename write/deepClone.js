@@ -13,29 +13,27 @@ const deepClone = (obj, cache = new Map()) => {
 		return res;
 	}
 
-	if (obj instanceof RegExp) {
-		res = new RegExp(obj.source, obj.flags);
-		cache.set(obj, res);
-		return res;
-	}
-
 	if (obj instanceof Date) {
 		res = new Date(obj);
 		cache.set(obj, res);
 		return res;
 	}
 
-	if (typeof obj === "object" && obj !== null) {
-		if (Array.isArray(obj)) {
+	if (obj instanceof RegExp) {
+		res = new RegExp(obj.source, obj.flags);
+		cache.set(obj, res);
+		return res;
+	}
+
+	if (obj instanceof Object) {
+		if (obj instanceof Array) {
 			res = [];
 		} else {
 			res = {};
 		}
-
 		for (let p in obj) {
 			res[p] = deepClone(obj[p], cache);
 		}
-
 		cache.set(obj, res);
 		return res;
 	}
@@ -45,7 +43,7 @@ const deepClone = (obj, cache = new Map()) => {
 
 
 const mm = {
-	a: 11, b: [{ l: 5 }], c: () => {
+	a: 11, b: [{l: 5}], c: () => {
 	}
 };
 

@@ -1,5 +1,6 @@
 const cycleDetector = (obj) => {
 	const cache = [obj];
+
 	let flag = false;
 
 	const cycle = (o) => {
@@ -11,12 +12,11 @@ const cycleDetector = (obj) => {
 						flag = true;
 						return;
 					}
+
 					cache.push(item);
-					cycle(item);
+					cycle(o[p]);
 				}
 			}
-		} else {
-			flag = false;
 		}
 	};
 
@@ -33,5 +33,5 @@ const obj = {
 	},
 	b: 1
 };
-obj.a.c.d = obj;
+obj.d = obj;
 console.log(cycleDetector(obj)); // true

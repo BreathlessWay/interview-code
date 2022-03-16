@@ -1,6 +1,6 @@
 Function.prototype.customApply = function (ctx, args) {
 	if (this === Function.prototype) {
-		throw new TypeError("禁止直接调用");
+		throw new TypeError("不能直接调用");
 	}
 
 	ctx = ctx || window;

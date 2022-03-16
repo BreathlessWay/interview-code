@@ -7,22 +7,20 @@ const loopGetLevel = (obj) => {
 				if (typeof o[p] === "object" && o[p] !== null) {
 					computedLevel(o[p], l + 1);
 				} else {
-					level = Math.max(level, l + 1);
+					level = Math.max(l + 1, level);
 				}
 			}
 		} else {
-			level = Math.max(level, l);
+			level = Math.max(l, level);
 		}
 	};
-
 	computedLevel(obj);
-
 	return level;
 };
 
 const obj = {
-	a: { b: [1] },
-	c: { d: { e: { f: 1 } } }
+	a: {b: [1]},
+	c: {d: {e: {f: 1}}}
 };
 
 console.log(loopGetLevel(obj)); // 4

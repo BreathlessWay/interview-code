@@ -1,8 +1,8 @@
 class Scheduler {
-	constructor (limit) {
+	constructor(limit) {
 		this.limit = limit;
-		this.queue = [];
 		this.count = 0;
+		this.queue = [];
 		this.result = [];
 	}
 
@@ -11,26 +11,24 @@ class Scheduler {
 	};
 
 	splitQueue = () => {
-		let arr = [],
-			len = this.queue.length;
+		const len = this.queue.length, res = [];
 		for (let i = 0; i < len; i += this.limit) {
-			arr.push(this.queue.slice(i, i + this.limit));
+			res.push(this.queue.slice(i, i + this.limit));
 		}
-		return arr;
+		return res;
 	};
 
 	request = () => {
-		const q = this.splitQueue(),
-			len = q.length,
-			current = q[this.count];
+		const sq = this.splitQueue(),
+			len = sq.length,
+			current = sq[this.count];
 
 		return Promise.all(current).then(res => {
-			this.count++;
 			this.result = this.result.concat(res);
-			if (this.count === len) {
+			if (this.count === len - 1) {
 				return this.result;
 			} else {
-				console.log(this.count, this.result);
+				this.count++;
 				return this.request();
 			}
 		});
