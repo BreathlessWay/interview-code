@@ -8,7 +8,6 @@ const flattenArray = (arr) => {
 		}
 	}
 
-
 	return result;
 };
 
@@ -18,10 +17,19 @@ const flatArray = (arr) => {
 		arr = [].concat(...arr);
 	}
 
-	return arr
+	return arr;
 };
 
+const flatReduce = (arr, deep = 1) => {
+	return arr.reduce((pre, current) => {
+		if (Array.isArray(current) && deep > 1) {
+			return pre.concat(flatReduce(current, deep - 1));
+		} else {
+			return pre.concat(current);
+		}
+	}, []);
+};
 
-const data = flatArray([[1, 2], [3, [4, 5], 6, [7, 8]], 9]);
+const data = flatArray([[1, 2], [3, [4, [3, 3, 3], 5], 6, [7, 8]], 9]);
 
 console.log(data);

@@ -25,15 +25,21 @@ const deepClone = (obj, cache = new Map()) => {
 		return res;
 	}
 
-	if (obj instanceof Object) {
-		if (obj instanceof Array) {
+	if (typeof obj === "object" && obj !== null) {
+		if (Array.isArray(obj)) {
 			res = [];
 		} else {
 			res = {};
 		}
 		for (let p in obj) {
-			res[p] = deepClone(obj[p], cache);
+			res [p] = deepClone(obj[p], cache);
 		}
+		cache.set(obj, res);
+		return res;
+	}
+
+	if (typeof obj === "symbol") {
+		res = Object(Symbol.prototype.valueOf.call(obj));
 		cache.set(obj, res);
 		return res;
 	}
