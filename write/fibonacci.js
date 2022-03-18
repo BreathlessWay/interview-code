@@ -1,3 +1,5 @@
+// 爬楼梯 矩形覆盖 问题的变种
+
 const fibonacci = (n, cache = []) => {
 	if (n < 2) {
 		return n;
