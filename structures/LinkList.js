@@ -25,7 +25,36 @@ class LinkList {
 		this.count++;
 	};
 
-	remove = () => {
+	removeAt = (index) => {
+		if (index > this.count || index < 0) {
+			return void 0;
+		}
+
+		let i = 0, current = this.head;
+
+		if (index === 0) {
+			this.head = current.next;
+			this.count--;
+			return current.value;
+		}
+
+		while (current) {
+			if (index - 1 === i) {
+				let mid = current;
+				current.next = mid.next.next;
+				this.count--;
+				return mid.value;
+			}
+			i++;
+			current = current.next;
+		}
+
+		return void 0;
+	};
+
+	remove = (value) => {
+		const index = this.indexOf(value);
+		return this.removeAt(index);
 	};
 
 	indexOf = (value) => {
@@ -38,6 +67,22 @@ class LinkList {
 			index++;
 		}
 		return -1;
+	};
+
+	reverse = () => {
+		if (this.count) {
+			let current = this.head,
+				nextNode = null;
+
+			while (current) {
+				const mid = current.next;
+				current.next = nextNode;
+				nextNode = current;
+				current = mid;
+			}
+			this.head = nextNode;
+		}
+		return null;
 	};
 
 	toString = () => {
@@ -56,4 +101,9 @@ linklist.add(1);
 linklist.add(2);
 linklist.add(3);
 
-console.log(linklist.indexOf(3));
+// linklist.toString();
+// console.log(linklist.indexOf(1));
+// linklist.toString();
+
+linklist.reverse();
+linklist.toString();
