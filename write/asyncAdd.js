@@ -18,9 +18,7 @@ const promiseAdd = (a, b) => {
 
 // 串行
 const serialSum = async (...args) => {
-	return args.reduce((previousValue, currentValue) => {
-		return previousValue.then(res => promiseAdd(res, currentValue));
-	}, Promise.resolve(0));
+	return args.reduce((previousValue, currentValue) => previousValue.then(res => promiseAdd(res, currentValue)), Promise.resolve(0));
 };
 
 serialSum(1, 2, 3, 4, 5, 8, 9, 10, 11, 12).then(res => {
@@ -29,7 +27,9 @@ serialSum(1, 2, 3, 4, 5, 8, 9, 10, 11, 12).then(res => {
 
 // 并行
 const parallelSum = async (...args) => {
-	if (args.length < 2) return args[0];
+	if (args.length < 2) {
+		return args[0];
+	}
 	const task = [];
 	for (let i = 0; i < args.length; i += 2) {
 		task.push(promiseAdd(args[i], args[i + 1] || 0));

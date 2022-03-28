@@ -5,10 +5,10 @@ const customNew = (fn, ...args) => {
 
 	const res = fn.apply(obj, args);
 
-	return res instanceof Object ? res : obj;
+	return typeof res === "object" ? res : obj;
 };
 
-function Person(name, age) {
+function Person (name, age) {
 	this.name = name;
 	this.age = age;
 }

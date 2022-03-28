@@ -2,11 +2,11 @@ const currying = (fn, ...args) => {
 	const funLen = fn.length,
 		argLen = args.length;
 
-	if (funLen > argLen) {
-		return (...rest) => currying(fn, ...args, ...rest);
-	} else {
+	if (argLen === funLen) {
 		return fn(...args);
 	}
+
+	return (...rest) => currying(fn, ...rest, ...args);
 };
 
 const add = (a, b, c) => a + b + c;

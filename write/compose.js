@@ -1,5 +1,8 @@
 const compose = (...args) => {
-	if (!args.length) return (...rest) => rest;
+	if (!args.length) {
+		return (...rest) => rest;
+	}
+
 	return (...rest) => {
 		if (args.length === 1) {
 			return args[0].apply(this, rest);

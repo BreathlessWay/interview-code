@@ -1,8 +1,8 @@
 // 爬楼梯 矩形覆盖 问题的变种
 
 const fibonacci = (n, cache = []) => {
-	if (n < 2) {
-		return n;
+	if (n <= 2) {
+		return 1;
 	}
 
 	if (!cache[n]) {
@@ -19,13 +19,13 @@ const fibonacciWhile = (n) => {
 		pre = 1;
 
 	while (n > 2) {
-		let mid = res
-		res = pre + res;
+		let mid = res;
+		res = pre + mid;
 		pre = mid;
 		n--;
 	}
-
 	console.log(res);
+	return res;
 };
 
 fibonacciWhile(3);

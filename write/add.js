@@ -1,11 +1,9 @@
 const add = (...args) => {
 	return (...rest) => {
 		if (rest.length) {
-			return add(...rest, ...args);
+			return add(...args, ...rest);
 		} else {
-			return args.reduce((previousValue, currentValue) => {
-				return previousValue + currentValue;
-			});
+			return args.reduce((previousValue, currentValue) => previousValue + currentValue);
 		}
 	};
 };

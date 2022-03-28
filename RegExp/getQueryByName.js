@@ -1,5 +1,5 @@
 const getQueryByName = (name) => {
-	const reg = new RegExp(`&?${name}=([^&]*)(&|$)`); // [^&]不包含 &
+	const reg = new RegExp(`[?&]?${name}=([^&]*)[&$]`);  // [^&]不包含 &
 
 	const result = "ie=UTF-8&wd=正则".match(reg);
 	console.log(result);

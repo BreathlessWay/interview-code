@@ -5,7 +5,7 @@ const deepClone = (obj, cache = new Map()) => {
 
 	let res;
 
-	if (typeof obj === "function") {
+	if (obj instanceof Function) {
 		res = function () {
 			return obj.apply(this, arguments);
 		};
@@ -31,9 +31,11 @@ const deepClone = (obj, cache = new Map()) => {
 		} else {
 			res = {};
 		}
+
 		for (let p in obj) {
-			res [p] = deepClone(obj[p], cache);
+			res[p] = deepClone(obj[p], cache);
 		}
+
 		cache.set(obj, res);
 		return res;
 	}
@@ -49,7 +51,7 @@ const deepClone = (obj, cache = new Map()) => {
 
 
 const mm = {
-	a: 11, b: [{l: 5}], c: () => {
+	a: 11, b: [{ l: 5 }], c: () => {
 	}
 };
 

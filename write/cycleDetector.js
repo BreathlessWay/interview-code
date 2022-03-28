@@ -6,14 +6,13 @@ const cycleDetector = (obj) => {
 	const cycle = (o) => {
 		if (typeof o === "object" && o !== null) {
 			for (let p in o) {
-				const item = o[p];
-				if (typeof item === "object" && item !== null) {
-					if (cache.includes(item)) {
+				if (typeof o[p] === "object" && o[p] !== null) {
+					if (cache.includes(o[p])) {
 						flag = true;
 						return;
 					}
 
-					cache.push(item);
+					cache.push(o[p]);
 					cycle(o[p]);
 				}
 			}
@@ -21,7 +20,6 @@ const cycleDetector = (obj) => {
 	};
 
 	cycle(obj);
-
 	return flag;
 };
 

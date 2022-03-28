@@ -1,13 +1,12 @@
 const flattenArray = (arr) => {
 	let result = [];
-	for (let i = 0; i < arr.length; i++) {
-		if (Array.isArray(arr[i])) {
-			result = result.concat(flattenArray(arr[i]));
+	arr.forEach(item => {
+		if (Array.isArray(item)) {
+			result = result.concat(flattenArray(item));
 		} else {
-			result.push(arr[i]);
+			result.push(item);
 		}
-	}
-
+	});
 	return result;
 };
 
@@ -16,7 +15,6 @@ const flatArray = (arr) => {
 	while (arr.some(item => Array.isArray(item))) {
 		arr = [].concat(...arr);
 	}
-
 	return arr;
 };
 
@@ -30,6 +28,6 @@ const flatReduce = (arr, deep = 1) => {
 	}, []);
 };
 
-const data = flatArray([[1, 2], [3, [4, [3, 3, 3], 5], 6, [7, 8]], 9]);
+const data = flatReduce([[1, 2], [3, [4, [3, 3, 3], 5], 6, [7, 8]], 9]);
 
 console.log(data);
