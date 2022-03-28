@@ -1,5 +1,5 @@
 class LRUCache {
-	constructor(limit) {
+	constructor (limit) {
 		this.limit = limit;
 		this.map = new Map();
 	}
@@ -22,9 +22,9 @@ class LRUCache {
 			this.map.delete(key);
 			this.map.set(key, v);
 			return v;
-		} else {
-			return -1;
 		}
+
+		return -1;
 	};
 }
 

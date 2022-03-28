@@ -1,10 +1,10 @@
 class LazyMan {
-	constructor(name) {
+	constructor (name) {
 		this.name = name;
 		this.queue = [];
 
 		this.queue.push(() => {
-			console.log(`I am ${this.name}`);
+			console.log("my name is " + this.name);
 			this.next();
 		});
 
@@ -20,7 +20,7 @@ class LazyMan {
 
 	eat = (food) => {
 		this.queue.push(() => {
-			console.log(food);
+			console.log("i have " + food);
 			this.next();
 		});
 		return this;
@@ -29,7 +29,7 @@ class LazyMan {
 	sleep = (time) => {
 		this.queue.push(() => {
 			setTimeout(() => {
-				console.log(`sleep ${time}`);
+				console.log("i sleep " + time);
 				this.next();
 			}, time);
 		});
@@ -39,7 +39,7 @@ class LazyMan {
 	sleepFirst = (time) => {
 		this.queue.unshift(() => {
 			setTimeout(() => {
-				console.log(`sleep ${time}`);
+				console.log("i sleep " + time);
 				this.next();
 			}, time);
 		});
