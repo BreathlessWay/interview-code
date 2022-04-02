@@ -20,12 +20,12 @@ const fibonacciWhile = (n) => {
 
 	while (n > 2) {
 		let mid = res;
-		res = pre + mid;
+		res = mid + pre;
 		pre = mid;
 		n--;
 	}
+
 	console.log(res);
-	return res;
 };
 
 fibonacciWhile(3);

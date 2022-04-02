@@ -8,7 +8,7 @@ const customNew = (fn, ...args) => {
 	return typeof res === "object" ? res : obj;
 };
 
-function Person (name, age) {
+function Person(name, age) {
 	this.name = name;
 	this.age = age;
 }

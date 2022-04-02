@@ -20,6 +20,7 @@ const cycleDetector = (obj) => {
 	};
 
 	cycle(obj);
+
 	return flag;
 };
 

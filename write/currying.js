@@ -1,8 +1,8 @@
 const currying = (fn, ...args) => {
 	const funLen = fn.length,
-		argLen = args.length;
+		argsLen = args.length;
 
-	if (argLen === funLen) {
+	if (funLen === argsLen) {
 		return fn(...args);
 	}
 

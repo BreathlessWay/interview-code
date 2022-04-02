@@ -1,10 +1,8 @@
 const compose = (...args) => {
-	if (!args.length) {
-		return (...rest) => rest;
-	}
-
+	const len = args.length;
+	if (!len) return v => v;
 	return (...rest) => {
-		if (args.length === 1) {
+		if (len === 1) {
 			return args[0].apply(this, rest);
 		}
 
@@ -18,15 +16,15 @@ const compose = (...args) => {
 	};
 };
 
-function fn1 (x) {
+function fn1(x) {
 	return x + 1;
 }
 
-function fn2 (x) {
+function fn2(x) {
 	return x * 10;
 }
 
-function fn3 (x) {
+function fn3(x) {
 	return x - 1;
 }
 

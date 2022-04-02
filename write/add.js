@@ -2,9 +2,11 @@ const add = (...args) => {
 	return (...rest) => {
 		if (rest.length) {
 			return add(...args, ...rest);
-		} else {
-			return args.reduce((previousValue, currentValue) => previousValue + currentValue);
 		}
+
+		return args.reduce((previousValue, currentValue) => {
+			return previousValue + currentValue;
+		});
 	};
 };
 

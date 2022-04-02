@@ -1,11 +1,9 @@
 const deepClone = (obj, cache = new Map()) => {
-	if (cache.has(obj)) {
-		return cache.get(obj);
-	}
+	if (cache.has(obj)) return cache.get(obj);
 
 	let res;
 
-	if (obj instanceof Function) {
+	if (typeof obj === "function") {
 		res = function () {
 			return obj.apply(this, arguments);
 		};
@@ -25,6 +23,12 @@ const deepClone = (obj, cache = new Map()) => {
 		return res;
 	}
 
+	if (typeof obj === "symbol") {
+		res = Object(Symbol.prototype.valueOf.call(obj));
+		cache.set(obj, res);
+		return res;
+	}
+
 	if (typeof obj === "object" && obj !== null) {
 		if (Array.isArray(obj)) {
 			res = [];
@@ -40,18 +44,12 @@ const deepClone = (obj, cache = new Map()) => {
 		return res;
 	}
 
-	if (typeof obj === "symbol") {
-		res = Object(Symbol.prototype.valueOf.call(obj));
-		cache.set(obj, res);
-		return res;
-	}
-
 	return obj;
 };
 
 
 const mm = {
-	a: 11, b: [{ l: 5 }], c: () => {
+	a: 11, b: [{l: 5}], c: () => {
 	}
 };
 
