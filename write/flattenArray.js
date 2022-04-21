@@ -21,11 +21,10 @@ const flatArray = (arr) => {
 const flatReduce = (arr, deep = 1) => {
 	return arr.reduce((pre, current) => {
 		if (Array.isArray(current) && deep > 1) {
-			pre = pre.concat(flatReduce(current), deep - 1);
+			return pre.concat(flatReduce(current, deep - 1));
 		} else {
-			pre = pre.concat(current);
+			return pre.concat(current);
 		}
-		return pre;
 	}, []);
 };
 

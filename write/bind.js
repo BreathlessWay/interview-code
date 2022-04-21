@@ -1,17 +1,17 @@
 Function.prototype.customBind = function (ctx) {
 	if (this === Function.prototype) {
-		throw new TypeError("不能直接调用");
+		throw new TypeError("禁止直接调用");
 	}
-
-	ctx = ctx || window;
 
 	const _this = this;
 
-	return function F () {
+	ctx = ctx || window;
+
+	return function F() {
 		if (this instanceof F) {
 			return new _this(...arguments);
-		} else {
-			return _this.apply(ctx, arguments);
 		}
+
+		return _this.apply(ctx, arguments);
 	};
 };

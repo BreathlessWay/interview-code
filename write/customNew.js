@@ -5,7 +5,7 @@ const customNew = (fn, ...args) => {
 
 	const res = fn.apply(obj, args);
 
-	return typeof res === "object" ? res : obj;
+	return typeof res === "object" && res !== null ? res : obj;
 };
 
 function Person(name, age) {
