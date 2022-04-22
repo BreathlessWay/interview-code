@@ -15,7 +15,12 @@ const fibonacci = (n, cache = []) => {
 console.log(fibonacci(5));
 // 1 1 2 3 5
 const fibonacciWhile = (n) => {
-	let pre = 1, res = 1;
+	if (n <= 2) {
+		return 1;
+	}
+
+	let res = 1,
+		pre = 1;
 
 	while (n > 2) {
 		let mid = res;
@@ -23,6 +28,7 @@ const fibonacciWhile = (n) => {
 		pre = mid;
 		n--;
 	}
+
 	console.log(res);
 };
 
