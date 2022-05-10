@@ -23,7 +23,7 @@ const merge = (left, right) => {
 const mergeSort = (arr) => {
 	const len = arr.length;
 
-	if (len < 2) {
+	if (len === 1) {
 		return arr[0];
 	}
 

@@ -1,22 +1,25 @@
 const maxNotRepeat = (str) => {
-	let maxLen = 0,
+	let max = 0,
+		maxStr = "",
 		start = 0,
-		res = "",
-		map = new Map();
+		json = {};
 
 	for (let i = 0; i < str.length; i++) {
-		const v = str[i];
-		if (map.has(v)) {
-			start = Math.max(start, map.get(v) + 1);
+		const item = str[i];
+
+		if (json[item] !== undefined) {
+			start = Math.max(start, json[item] + 1);
 		}
 
-		map.set(v, i);
-		if (maxLen < i - start + 1) {
-			maxLen = i - start + 1;
-			res = str.slice(start, i + 1);
+		json[item] = i;
+
+		if (max < i - start + 1) {
+			max = i - start + 1;
+			maxStr = str.slice(start, i + 1);
 		}
 	}
-	console.log(maxLen, res);
+
+	console.log(max, maxStr);
 };
 
 maxNotRepeat("abcabcbb");
