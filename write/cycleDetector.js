@@ -1,20 +1,17 @@
 const cycleDetector = (obj) => {
-	const cache = [obj];
+	const cache = new Set();
 
 	let flag = false;
 
 	const cycle = (o) => {
-		if (typeof o === "object" && o !== null) {
+		if (typeof o === "object" && o) {
+			if (cache.has(o)) {
+				flag = true;
+				return flag;
+			}
+			cache.add(o);
 			for (let p in o) {
-				if (typeof o[p] === "object" && o[p] !== null) {
-					if (cache.includes(o[p])) {
-						flag = true;
-						return;
-					}
-
-					cache.push(o[p]);
-					cycle(o[p]);
-				}
+				cycle(o[p]);
 			}
 		}
 	};

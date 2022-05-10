@@ -1,10 +1,7 @@
 const compose = (...args) => {
-	const len = args.length;
-	if (!len) return v => v;
+	if (!args.length) return v => v;
 	return (...rest) => {
-		if (len === 1) {
-			return args[0].apply(this, rest);
-		}
+		if (args.length === 1) return args[0].apply(this, rest);
 
 		return args.reduce((previousValue, currentValue) => {
 			if (typeof previousValue === "function") {

@@ -4,17 +4,15 @@ const asyncAdd = (a, b, cb) => {
 	}, 500);
 };
 
-const promiseAdd = (a, b) => {
-	return new Promise((resolve, reject) => {
-		asyncAdd(a, b, (err, res) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(res);
-			}
-		});
+const promiseAdd = (a, b) => new Promise((resolve, reject) => {
+	asyncAdd(a, b, (err, res) => {
+		if (err) {
+			reject(err);
+		} else {
+			resolve(res);
+		}
 	});
-};
+});
 
 // 串行
 const serialSum = async (...args) => {
@@ -30,11 +28,11 @@ serialSum(1, 2, 3, 4, 5, 8, 9, 10, 11, 12).then(res => {
 // 并行
 const parallelSum = async (...args) => {
 	if (args.length === 1) return args[0];
-	const tasks = [];
+	const task = [];
 	for (let i = 0; i < args.length; i += 2) {
-		tasks.push(promiseAdd(args[i], args[i + 1] || 0));
+		task.push(promiseAdd(args[i], args[i + 1] || 0));
 	}
-	const result = await Promise.all(tasks);
+	const result = await Promise.all(task);
 	return parallelSum(...result);
 };
 
