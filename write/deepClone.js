@@ -5,8 +5,10 @@ const deepClone = (obj, cache = new Map()) => {
 
 	let res;
 
-	if (obj instanceof RegExp) {
-		res = new RegExp(obj.source, obj.flags);
+	if (typeof obj === "function") {
+		res = function () {
+			return obj.apply(this, arguments);
+		};
 		cache.set(obj, res);
 		return res;
 	}
@@ -17,21 +19,19 @@ const deepClone = (obj, cache = new Map()) => {
 		return res;
 	}
 
-	if (typeof obj === "function") {
-		res = function () {
-			return obj.apply(this, arguments);
-		};
+	if (obj instanceof RegExp) {
+		res = new RegExp(obj.source, obj.flags);
 		cache.set(obj, res);
 		return res;
 	}
 
-	if (typeof obj === "symbol") {
+	if (obj instanceof Symbol) {
 		res = Object(Symbol.prototype.valueOf.call(obj));
 		cache.set(obj, res);
 		return res;
 	}
 
-	if (typeof obj === "object" && obj !== null) {
+	if (typeof obj === "object" && obj) {
 		if (Array.isArray(obj)) {
 			res = [];
 		} else {
@@ -41,7 +41,6 @@ const deepClone = (obj, cache = new Map()) => {
 		for (let p in obj) {
 			res[p] = deepClone(obj[p], cache);
 		}
-
 		cache.set(obj, res);
 		return res;
 	}

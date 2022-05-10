@@ -1,11 +1,12 @@
-const customInstance = (source, target) => {
-	let proto = source.__proto__;
+const customInstance = (target, source) => {
+	let proto = target.__proto__;
 
 	while (true) {
-		if (proto === target.prototype) {
+		if (proto === source.prototype) {
 			return true;
 		}
 		proto = proto.__proto__;
+
 		if (!proto) {
 			return false;
 		}
