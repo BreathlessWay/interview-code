@@ -2,7 +2,7 @@ const flattenObject = (obj) => {
 	const result = {};
 
 	const dfs = (o, prefix = "") => {
-		if (typeof o === "object" && o !== null) {
+		if (typeof o === "object" && o) {
 			for (let p in o) {
 				dfs(o[p], `${prefix}${prefix ? "." : ""}${p}`);
 			}
