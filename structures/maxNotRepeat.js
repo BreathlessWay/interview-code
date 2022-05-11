@@ -1,7 +1,7 @@
 const maxNotRepeat = (str) => {
 	let max = 0,
-		maxStr = "",
 		start = 0,
+		maxStr = "",
 		json = {};
 
 	for (let i = 0; i < str.length; i++) {
