@@ -22,7 +22,7 @@ const letterCombinations = (digits) => {
 		}
 	};
 	backtracking(0);
-
+	console.log(result);
 	return result;
 };
 

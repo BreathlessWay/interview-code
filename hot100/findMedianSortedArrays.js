@@ -1,32 +1,34 @@
 const getKthElement = (arr1, arr2, k) => {
 	let len1 = arr1.length,
 		len2 = arr2.length,
-		index1 = 0,
-		index2 = 0;
+		startIndex1 = 0,
+		startIndex2 = 0;
 
 	while (true) {
-		if (index1 === len1) {
-			return arr2[index2 + k - 1];
+		if (startIndex1 === len1) {
+			return arr2[startIndex2 + k - 1];
 		}
-		if (index2 === len2) {
-			return arr1[index1 + k - 1];
+
+		if (startIndex2 === len2) {
+			return arr1[startIndex1 + k - 1];
 		}
+
 		if (k === 1) {
-			return Math.min(arr1[index1], arr2[index2]);
+			return Math.min(arr1[startIndex1], arr2[startIndex2]);
 		}
 
-		const half = Math.floor(k / 2),
-			newIndex1 = Math.min(index1 + half, len1) - 1,
-			newIndex2 = Math.min(index2 + half, len2) - 1,
-			pivot1 = arr1[newIndex1],
-			pivot2 = arr2[newIndex2];
+		const mid = Math.floor(k / 2),
+			arrMidIndex1 = Math.min(startIndex1 + mid, len1) - 1,
+			arrMidIndex2 = Math.min(startIndex2 + mid, len2) - 1,
+			mid1 = arr1[arrMidIndex1],
+			mid2 = arr2[arrMidIndex2];
 
-		if (pivot1 <= pivot2) {
-			k = k - (newIndex1 - index1 + 1);
-			index1 = newIndex1 + 1;
+		if (mid1 <= mid2) {
+			k = k - (arrMidIndex1 - startIndex1 + 1);
+			startIndex1 = arrMidIndex1 + 1;
 		} else {
-			k = k - (newIndex2 - index2 + 1);
-			index2 = newIndex2 + 1;
+			k = k - (arrMidIndex2 - startIndex2 + 1);
+			startIndex2 = arrMidIndex2 + 1;
 		}
 	}
 };

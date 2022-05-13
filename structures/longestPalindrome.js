@@ -1,36 +1,40 @@
 // 中心扩散法
-const longestPalindrome = (str) => {
-	if (!str) {
-		return "";
-	}
+const longestPalindrome = (s) => {
+	let start = 0,
+		maxLen = 0,
+		left = 0,
+		right = 0,
+		len = s.length;
 
-	let left = 0, right = 0, maxStart = 0, maxLen = 0, len = 1, strLen = str.length;
-
-	for (let i = 0; i < strLen; i++) {
+	for (let i = 0; i < len; i++) {
 		left = i - 1;
 		right = i + 1;
-		const item = str[i];
-		while (left >= 0 && str[left] === item) {
-			len++;
+		const item = s[i];
+		let max = 0;
+
+		while (left >= 0 && s[left] === item) {
 			left--;
+			max++;
 		}
-		while (right < strLen && str[right] === item) {
-			len++;
+
+		while (right < len && s[right] === item) {
 			right++;
+			max++;
 		}
-		while (left >= 0 && right < strLen && str[left] === str[right]) {
-			len += 2;
+
+		while (left >= 0 && right < len && s[left] === s[right]) {
 			left--;
 			right++;
+			max += 2;
 		}
-		if (maxLen < len) {
-			maxLen = len;
-			maxStart = left;
+
+		if (max > maxLen) {
+			start = left + 1;
+			maxLen = max;
 		}
 	}
 
-	return str.slice(maxStart + 1, maxStart + maxLen + 1);
+	return s.slice(start, start + maxLen + 1);
 };
 
-console.log(longestPalindrome("ccc"));
-console.log(longestPalindrome("ccc"));
+console.log(longestPalindrome("cbbd"));
