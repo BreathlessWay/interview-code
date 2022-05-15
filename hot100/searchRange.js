@@ -22,4 +22,4 @@ const searchRange = (nums, target) => {
 	return [-1, -1];
 };
 
-console.log(searchRange([5, 7, 7, 8, 8, 10], 8));
+console.log(searchRange([1], 1));
