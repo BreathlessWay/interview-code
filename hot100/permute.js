@@ -10,7 +10,7 @@ const permute = (nums) => {
 	if (!len) return [];
 	if (len === 1) return [nums];
 
-	const dfs = (index, cache = []) => {
+	const dfs = (cache = []) => {
 		if (res.length === len) {
 			result.push([...res]);
 			return;
@@ -22,14 +22,14 @@ const permute = (nums) => {
 			res.push(nums[i]);
 			cache[i] = true;
 
-			dfs(index + 1, cache);
+			dfs(cache);
 
 			res.pop();
 			cache[i] = false;
 		}
 	};
 
-	dfs(0);
+	dfs();
 	console.log(result);
 	return result;
 };
