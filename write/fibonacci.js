@@ -1,22 +1,22 @@
 // 爬楼梯 矩形覆盖 问题的变种
 
-const fibonacci = (n, cache = []) => {
+const fibonacci = (n, cache = [0, 1, 1]) => {
 	if (n <= 2) {
-		return 1;
+		return cache[n];
 	}
 
-	if (!cache[n]) {
-		cache[n] = fibonacci(n - 1) + fibonacci(n - 2);
+	if (!cache[n - 1]) {
+		cache[n - 1] = fibonacci(n - 1, cache) + fibonacci(n - 2, cache);
 	}
-
-	return cache[n];
+	console.log(cache, n, cache[n - 1]);
+	return cache[n - 1];
 };
 
 console.log(fibonacci(5));
 
 // 尾调用优化
 const fibImp = (a, b, n) => {
-	if (n === 0) {
+	if (n <= 1) {
 		return a;
 	}
 
@@ -26,16 +26,16 @@ const fib = (n) => fibImp(0, 1, n);
 // 尾调用优化
 console.log(fib(5));
 
-// 1 1 2 3 5
+// 0 1 1 2 3 5
 const fibonacciWhile = (n) => {
-	if (n <= 2) {
-		return 1;
+	if (n <= 1) {
+		return n;
 	}
 
-	let res = 1,
+	let res = 0,
 		pre = 1;
 
-	while (n > 2) {
+	while (n > 1) {
 		let mid = res;
 		res = pre + res;
 		pre = mid;
@@ -45,4 +45,4 @@ const fibonacciWhile = (n) => {
 	console.log(res);
 };
 
-fibonacciWhile(3);
+fibonacciWhile(5);
