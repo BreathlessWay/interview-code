@@ -3,13 +3,9 @@ const compose = (...args) => {
 	return (...rest) => {
 		if (args.length === 1) return args[0].apply(this, rest);
 
-		return args.reduce((previousValue, currentValue) => {
-			if (typeof previousValue === "function") {
-				return currentValue(previousValue(...rest));
-			} else {
-				return currentValue(previousValue);
-			}
-		});
+		return args.reduce(((previousValue, currentValue) => {
+			return typeof previousValue === "function" ? currentValue(previousValue(...rest)) : currentValue(previousValue);
+		}));
 	};
 };
 

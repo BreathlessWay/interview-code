@@ -4,9 +4,7 @@ const add = (...args) => {
 			return add(...args, ...rest);
 		}
 
-		return args.reduce((previousValue, currentValue) => {
-			return previousValue + currentValue;
-		});
+		return args.reduce((a, b) => a + b);
 	};
 };
 
