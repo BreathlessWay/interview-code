@@ -54,6 +54,20 @@ class CustomPromise {
 		});
 	}
 
+	static resolve(value) {
+		const promise = new CustomPromise((resolve, reject) => {
+			resolvePromise(promise, value, resolve, reject);
+		});
+
+		return promise;
+	}
+
+	static reject(error) {
+		return new CustomPromise((resolve, reject) => {
+			reject(error);
+		});
+	}
+
 	resolve = (value) => {
 		if (this.status === "Pending") {
 			this.status = "Fulfilled";
@@ -84,13 +98,13 @@ class CustomPromise {
 			};
 		}
 
-		return new CustomPromise((resolve, reject) => {
+		const promise2 = new CustomPromise((resolve, reject) => {
 			switch (this.status) {
 				case "Pending": {
 					this.onFulfilledCallback.push((v) => {
 						setTimeout(() => {
 							try {
-								resolve(onResolve(v));
+								resolvePromise(promise2, onResolve(v), resolve, reject);
 							} catch (e) {
 								reject(e);
 							}
@@ -99,7 +113,7 @@ class CustomPromise {
 					this.onRejectedCallback.push((err) => {
 						setTimeout(() => {
 							try {
-								reject(onReject(err));
+								resolvePromise(promise2, onReject(err), resolve, reject);
 							} catch (e) {
 								reject(e);
 							}
@@ -110,7 +124,7 @@ class CustomPromise {
 				case "Fulfilled": {
 					setTimeout(() => {
 						try {
-							resolve(onResolve(this.result));
+							resolvePromise(promise2, onResolve(this.result), resolve, reject);
 						} catch (e) {
 							reject(e);
 						}
@@ -120,7 +134,7 @@ class CustomPromise {
 				case "Rejected": {
 					setTimeout(() => {
 						try {
-							reject(onReject(this.reason));
+							resolvePromise(promise2, onReject(this.reason), resolve, reject);
 						} catch (e) {
 							reject(e);
 						}
@@ -129,6 +143,7 @@ class CustomPromise {
 				}
 			}
 		});
+		return promise2;
 	};
 
 	catch = (onReject) => {
@@ -145,5 +160,45 @@ class CustomPromise {
 		});
 	};
 }
+
+const resolvePromise = (promise2, x, resolve, reject) => {
+	if (promise2 === x) return reject(new TypeError(""));
+	if (x instanceof CustomPromise) {
+		if (x.status === "Pending") {
+			x.then(v => resolvePromise(promise2, v, resolve, reject), reject);
+		} else {
+			x.then(resolve, reject);
+		}
+		return;
+	}
+	let called = false;
+	if (x !== null && (typeof x === "object" || typeof x === "function")) {
+		try {
+			const then = x.then;
+
+			if (typeof then === "function") {
+				then.call(x, v => {
+					if (called) return;
+					called = true;
+					resolvePromise(promise2, v, resolve, reject);
+				}, e => {
+					if (called) return;
+					called = true;
+					reject(e);
+				});
+			} else {
+				if (called) return;
+				called = true;
+				resolve(x);
+			}
+		} catch (e) {
+			if (called) return;
+			called = true;
+			reject(e);
+		}
+	} else {
+		resolve(x);
+	}
+};
 
 // 用promise race + setTimeout 实现请求超时时间
