@@ -3,7 +3,7 @@ class LazyMan {
 		this.name = name;
 		this.task = [];
 		this.task.push(() => {
-			console.log(` my name is ${name}`);
+			console.log(this.name);
 			this.next();
 		});
 

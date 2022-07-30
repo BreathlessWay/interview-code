@@ -104,6 +104,7 @@ class CustomPromise {
 					this.onFulfilledCallback.push((v) => {
 						setTimeout(() => {
 							try {
+								// resolve(onResolve(v));
 								resolvePromise(promise2, onResolve(v), resolve, reject);
 							} catch (e) {
 								reject(e);
@@ -113,6 +114,7 @@ class CustomPromise {
 					this.onRejectedCallback.push((err) => {
 						setTimeout(() => {
 							try {
+								// reject(onReject(err));
 								resolvePromise(promise2, onReject(err), resolve, reject);
 							} catch (e) {
 								reject(e);
@@ -124,6 +126,7 @@ class CustomPromise {
 				case "Fulfilled": {
 					setTimeout(() => {
 						try {
+							// resolve(onResolve(this.result));
 							resolvePromise(promise2, onResolve(this.result), resolve, reject);
 						} catch (e) {
 							reject(e);
@@ -134,6 +137,7 @@ class CustomPromise {
 				case "Rejected": {
 					setTimeout(() => {
 						try {
+							// reject(onReject(this.reason));
 							resolvePromise(promise2, onReject(this.reason), resolve, reject);
 						} catch (e) {
 							reject(e);
@@ -171,8 +175,8 @@ const resolvePromise = (promise2, x, resolve, reject) => {
 		}
 		return;
 	}
-	let called = false;
 	if (x !== null && (typeof x === "object" || typeof x === "function")) {
+		let called = false;
 		try {
 			const then = x.then;
 
